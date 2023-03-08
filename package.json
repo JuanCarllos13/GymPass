@@ -1,0 +1,32 @@
+{
+  "name": "gympass",
+  "version": "1.0.0",
+  "description": "GymPass style app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanCarllos13/GymPass.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuanCarllos13/GymPass/issues"
+  },
+  "homepage": "https://github.com/JuanCarllos13/GymPass#readme",
+  "devDependencies": {
+    "@types/node": "^18.14.6",
+    "tsup": "^6.6.3",
+    "tsx": "^3.12.3",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "fastify": "^4.14.1"
+  }
+}
