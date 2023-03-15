@@ -1,14 +1,24 @@
 import fastify from "fastify";
-import { PrismaClient } from '@prisma/client'
+import { ZodError } from "zod";
+import { env } from "./env";
+import { appRoutes } from "./http/routes";
 
+export const app = fastify();
 
-export const app = fastify()
+app.register(appRoutes);
 
-const prisma = new PrismaClient()
+app.setErrorHandler((error, _request, response) => {
+  if (error instanceof ZodError) {
+    return response
+      .status(400)
+      .send({ message: "Validation error.", issues: error.format() });
+  }
 
-prisma.user.create({
-  data: {
-    name: 'Diego Fernandes',
-    email: 'diego@rocketsaeet.com.br',
-  },
-})
+  if (env.NODE_ENV !== "production") {
+    console.log(error);
+  } else {
+    // TODO
+  }
+
+  return response.status(500).send({ message: "Internal server error" });
+});

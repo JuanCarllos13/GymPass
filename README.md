@@ -10,7 +10,6 @@ Para o docker: docker compose stop
 
 rodar a imagem: docker start api-gymPass-pg
 
-
 Parar a imagem: docker stop api-gymPass-pg
 
 Listar as imagens: docker ps -a
