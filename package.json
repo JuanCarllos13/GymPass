@@ -8,7 +8,9 @@
     "start": "node build/server.js",
     "build": "tsup src --out-dir build",
     "test": "vitest run --dir src/services",
-    "test:watch": "vitest --dir src/services"
+    "test:watch": "vitest --dir src/services",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,8 @@
   "devDependencies": {
     "@types/bcryptjs": "2.4.2",
     "@types/node": "^18.14.6",
+    "@vitest/coverage-c8": "0.29.3",
+    "@vitest/ui": "0.29.3",
     "prisma": "4.11.0",
     "tsup": "^6.6.3",
     "tsx": "^3.12.3",
