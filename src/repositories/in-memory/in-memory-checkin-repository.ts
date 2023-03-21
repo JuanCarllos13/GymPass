@@ -6,6 +6,30 @@ import { CheckInRepository } from "../check-ins-repository";
 export class InMemoryCheckInRepository implements CheckInRepository {
   public items: CheckIn[] = [];
 
+  async save(checkIn: CheckIn) {
+    const checkInIndex = this.items.findIndex((item) => item.id === checkIn.id);
+
+    if (checkInIndex >= 0) {
+      this.items[checkInIndex] = checkIn;
+    }
+
+    return checkIn;
+  }
+
+  async findById(id: string) {
+    const checkIn = this.items.find((item) => item.id === id);
+
+    if (!checkIn) {
+      return null;
+    }
+
+    return checkIn;
+  }
+
+  async countByUserId(userId: string) {
+    return this.items.filter((item) => item.user_id === userId).length;
+  }
+
   async findManyByUserId(userId: string, page: number) {
     return this.items
       .filter((item) => item.user_id === userId)
