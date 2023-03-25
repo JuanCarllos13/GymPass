@@ -1,23 +1,24 @@
 import { CheckInRepository } from "@/repositories/check-ins-repository";
+import { PrismaCheckInsRepository } from "@/repositories/prisma/prisma-check-in-repository";
 import { CheckIn } from "@prisma/client";
 import dayjs from "dayjs";
 import { LateCheckInValidationError } from "../errors/late-check-in-validation-error";
 import { ResourceNotFound } from "../errors/reaource-not-found-error";
 
-interface ValidadeCheckInServiceRequest {
+interface ValidateCheckInUseCaseRequest {
   checkInId: string;
 }
 
-interface ValidadeCheckInServiceResponse {
+interface ValidateCheckInUseCaseResponse {
   checkIn: CheckIn;
 }
 
-export class ValidadeCheckInService {
-  constructor(private checkInsRepository: CheckInRepository) {}
+export class ValidateCheckInUseCase {
+  constructor(private checkInsRepository: PrismaCheckInsRepository) {}
 
   async execute({
     checkInId,
-  }: ValidadeCheckInServiceRequest): Promise<ValidadeCheckInServiceResponse> {
+  }: ValidateCheckInUseCaseRequest): Promise<ValidateCheckInUseCaseResponse> {
     const checkIn = await this.checkInsRepository.findById(checkInId);
 
     if (!checkIn) {
@@ -26,7 +27,7 @@ export class ValidadeCheckInService {
 
     const distanceInMinutesFromCheckInCreation = dayjs(new Date()).diff(
       checkIn.created_at,
-      "minute"
+      "minutes"
     );
 
     if (distanceInMinutesFromCheckInCreation > 20) {

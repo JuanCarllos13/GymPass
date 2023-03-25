@@ -1,15 +1,15 @@
 import { InMemoryCheckInRepository } from "@/repositories/in-memory/in-memory-checkin-repository";
-import { describe, it, beforeEach, expect, vi, afterEach } from "vitest";
+import { expect, describe, it, beforeEach, afterEach, vi } from "vitest";
 import { ResourceNotFound } from "../errors/reaource-not-found-error";
-import { ValidadeCheckInService } from "./validade-check-in";
+import { ValidateCheckInUseCase } from "./validade-check-in";
 
-let checkInRepository: InMemoryCheckInRepository;
-let sut: ValidadeCheckInService;
+let checkInsRepository: InMemoryCheckInRepository;
+let sut: ValidateCheckInUseCase;
 
-describe("Validade check-in Service", () => {
+describe("Validate Check-in Use Case", () => {
   beforeEach(async () => {
-    checkInRepository = new InMemoryCheckInRepository();
-    sut = new ValidadeCheckInService(checkInRepository);
+    checkInsRepository = new InMemoryCheckInRepository();
+    sut = new ValidateCheckInUseCase(checkInsRepository);
 
     vi.useFakeTimers();
   });
@@ -18,21 +18,21 @@ describe("Validade check-in Service", () => {
     vi.useRealTimers();
   });
 
-  it("should be able to validade the check-in", async () => {
-    const createCheckIn = await checkInRepository.create({
+  it("should be able to validate the check-in", async () => {
+    const createdCheckIn = await checkInsRepository.create({
       gym_id: "gym-01",
       user_id: "user-01",
     });
 
     const { checkIn } = await sut.execute({
-      checkInId: createCheckIn.id,
+      checkInId: createdCheckIn.id,
     });
 
     expect(checkIn.validated_at).toEqual(expect.any(Date));
-    expect(checkInRepository.items[0].validated_at).toEqual(expect.any(Date));
+    expect(checkInsRepository.items[0].validated_at).toEqual(expect.any(Date));
   });
 
-  it("should not be able to validade an inexistent check-in", async () => {
+  it("should not be able to validate an inexistent check-in", async () => {
     await expect(() =>
       sut.execute({
         checkInId: "inexistent-check-in-id",
@@ -40,10 +40,10 @@ describe("Validade check-in Service", () => {
     ).rejects.toBeInstanceOf(ResourceNotFound);
   });
 
-  it("should not be able to validate the check-in after 20 minutes of is creation", async () => {
+  it("should not be able to validate the check-in after 20 minutes of its creation", async () => {
     vi.setSystemTime(new Date(2023, 0, 1, 13, 40));
 
-    const createCheckIn = await checkInRepository.create({
+    const createdCheckIn = await checkInsRepository.create({
       gym_id: "gym-01",
       user_id: "user-01",
     });
@@ -54,7 +54,7 @@ describe("Validade check-in Service", () => {
 
     await expect(() =>
       sut.execute({
-        checkInId: createCheckIn.id,
+        checkInId: createdCheckIn.id,
       })
     ).rejects.toBeInstanceOf(Error);
   });
