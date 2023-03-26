@@ -1,9 +1,12 @@
 {
   "cSpell.words": [
+    "bitnami",
     "checkin",
     "dayjs",
     "fastify",
     "middlewares",
-    "Neaby"
+    "Neaby",
+    "postgres",
+    "postgresql"
   ]
 }
