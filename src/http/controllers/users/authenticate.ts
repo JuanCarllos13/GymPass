@@ -20,7 +20,9 @@ export async function authenticate(
     const { user } = await authenticateService.execute({ email, password });
 
     const token = await response.jwtSign(
-      {},
+      {
+        role: user.role
+      },
       {
         sign: {
           sub: user.id,
@@ -29,7 +31,9 @@ export async function authenticate(
     );
 
     const refreshToken = await response.jwtSign(
-      {},
+      {
+        role: user.role
+      },
       {
         sign: {
           sub: user.id,
